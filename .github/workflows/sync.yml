@@ -1,0 +1,17 @@
+name: Mirror sync from upstream
+on:
+  schedule:
+    - cron: '37 7 * * *'
+  workflow_dispatch:
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror upstream
+        run: |
+          git clone --mirror https://github.com/morluto/rea.git repo
+          cd repo
+          git remote set-url --push origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Srabani-Samaddar/rea.git
+          git push --mirror --force
